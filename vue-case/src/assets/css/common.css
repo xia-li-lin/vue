@@ -1,0 +1,13 @@
+.nav{
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+.nav li{
+    padding: 5px 10px;
+    cursor: pointer;
+}
+.router-link-active{
+    background: greenyellow;
+    color: #fff;
+}
