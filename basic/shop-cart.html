@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>购物车案例</title>
+    <style>
+        .active {
+            background-color: purple;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h2 v-bind:title="title">
+            {{title}}
+        </h2>
+        <!-- 新增课程 -->
+        <course-add v-model="course" @add-course="addCourse"></course-add>
+        <!-- 
+            v-model 相当于:value 和 @input的组合
+            <course-add :value="course" @input="OnInput" @add-course="addCourse"></course-add>
+         -->
+        <!-- 课程列表 -->
+        <course-list :courses="courses"></course-list>
+        <p>课程总数：{{totalCourse}}门</p>
+    </div>
+
+    <script src="./js/vue.js"></script>
+    <script src="./js/component.js"></script>
+    <script>
+        const vue = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    title: '购物车',
+                    totalCourse: 0,
+                    course: '',
+                    courses: [
+                        { id: '1', name: 'web全栈开发' },
+                        { id: '2', name: 'web高级开发' }
+                    ],
+                    newCourseId: '3',
+                    html: '<a href="http://www.alsovalue.com" target="_blank" style="color:red;">上海翱思网络科技有限公司</a>',
+                    items: ['a', 'b', 'c']
+                }
+            },
+            methods: {
+                addCourse() {
+                    if (!this.course) {
+                        return;
+                    }
+                    this.courses.push({
+                        id: this.newCourseId++,
+                        name: this.course
+                    });
+                    this.course = '';
+                }
+            },
+            // computed: {
+            //     total() {
+            //         return this.courses.length; 
+            //     }
+            // },
+            watch: {
+                courses: {
+                    immediate: true,
+                    deep: true,
+                    handler(newValue, oldValue) {
+                        this.totalCourse = newValue && newValue.length;
+                    }
+                }
+            },
+        });
+
+        // Vue.set(vue.items, 1, 'bb');
+        // vue.items.splice(0, 1, 'aa');
+
+        vue.$set(vue.items, 0, 'aa');
+        vue.items.splice(2);
+        console.log(vue.$options.render);
+    </script>
+</body>
+
+</html>
