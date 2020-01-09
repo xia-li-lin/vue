@@ -117,22 +117,25 @@ Vue.component('pop-ups', {
     },
     methods: {
         beforeEnter(el) {
-            el.style.opacity=0;
+            el.style.opacity = 0;
         },
-        enter(el,done) {
-            document.body.offsetHeight;
-            el.style.opacity=1;
+        enter(el, done) {
+            // document.body.offsetHeight;
+            // el.style.opacity=1;
             // 监听动画结束事件，并执行done
-            el.addEventListener('transitioned',done);
+            // el.addEventListener('transitioned',done);
+            // 纯js
+            Velocity(el, { opacity: 1 }, { duration: 500, complete: done });
         },
         beforeLeave(el) {
-            el.style.opacity=1;
+            el.style.opacity = 1;
         },
-        leave(el,done) {
-            document.body.offsetHeight;
-            el.style.opacity=0;
+        leave(el, done) {
+            // document.body.offsetHeight;
+            // el.style.opacity=0;
             // 监听动画结束事件，并执行done
-            el.addEventListener('transitioned',done);
+            // el.addEventListener('transitioned',done);
+            Velocity(el, { opacity: 0 }, { duration: 500, complete: done });
         }
     },
 });
