@@ -79,20 +79,60 @@ Vue.component('course-add', {
 // 弹窗组件
 Vue.component('pop-ups', {
     props: ['show'],
+    // template: `
+    //     <transition name="fade">
+    //         <div class="pop-ups-box" v-if="show">
+    //             <div class="pop-ups">
+    //                 <span class="close" @click="$emit('update:show',false)">x</span>
+    //                 <div class="content">
+    //                     <slot name="title">提示:</slot>
+    //                     <slot></slot>
+    //                 </div>
+    //             </div>
+    //         </div>
+    //     </transition>
+    // `,
     template: `
-        <div class="pop-ups-box" v-if="show">
-            <div class="pop-ups">
-                <span class="close" @click="$emit('update:show',false)">x</span>
-                <div class="content">
-                    <slot name="title">提示:</slot>
-                    <slot></slot>
+        <transition name="fade"
+                    @before-enter="beforeEnter"
+                    @enter="enter"
+                    @before-leave="beforeLeave"
+                    @leave="leave"
+        >
+            <div class="pop-ups-box" v-if="show">
+                <div class="pop-ups">
+                    <span class="close" @click="$emit('update:show',false)">x</span>
+                    <div class="content">
+                        <slot name="title">提示:</slot>
+                        <slot></slot>
+                    </div>
                 </div>
             </div>
-        </div>
+        </transition>
     `,
-    mounted(){
-        this.$bus.$on('pop-ups-close',()=>{
-            this.$emit('update:show',false);
+    mounted() {
+        this.$bus.$on('pop-ups-close', () => {
+            this.$emit('update:show', false);
         });
-    }
+    },
+    methods: {
+        beforeEnter(el) {
+            el.style.opacity=0;
+        },
+        enter(el,done) {
+            document.body.offsetHeight;
+            el.style.opacity=1;
+            // 监听动画结束事件，并执行done
+            el.addEventListener('transitioned',done);
+        },
+        beforeLeave(el) {
+            el.style.opacity=1;
+        },
+        leave(el,done) {
+            document.body.offsetHeight;
+            el.style.opacity=0;
+            // 监听动画结束事件，并执行done
+            el.addEventListener('transitioned',done);
+        }
+    },
 });

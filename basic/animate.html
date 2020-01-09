@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div id="app">
+        <button @click="show=!show">Toggle</button>
+        <transition enter-active-class="animated zoomIn"
+                    leave-active-slass="animated bounce">
+            <p v-if="show">hello vue!!!</p>
+        </transition>
+    </div>
+    <script src="./js/vue.js"></script>
+    <script>
+        const vm=new Vue({
+            el:'#app',
+            data() {
+                return {
+                    show: false
+                }
+            },
+        });
+    </script>
+</body>
+</html>
