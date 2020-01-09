@@ -41,8 +41,8 @@ Vue.component('course-list', {
         }
     },
     // 过滤器 - 局部
-    filters:{
-        currency(value,symbol='￥'){
+    filters: {
+        currency(value, symbol = '￥') {
             return symbol + value;
         }
     }
@@ -67,7 +67,7 @@ Vue.component('course-add', {
     },
     template: `
         <div>
-            <input type="text" :value="value" @input="onInput" @keyup.enter="addCourse">
+            <input type="text" v-focus :value="value" @input="onInput" @keyup.enter="addCourse">
             <button @click="addCourse" :disabled="onoff">新增</button>
             <p>{{value}}</p>
         </div>

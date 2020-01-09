@@ -62,9 +62,13 @@
         <course-add v-model="course" @add-course="addCourse"></course-add>
         <!-- 批量更新价格 -->
         <div>
-            <input type="text" v-model.number="price">
-            <button @click="batchUpdate">批量更新</button>
-            <button @click="$bus.$emit('pop-ups-close')">批量清除多个窗口</button>
+            <div v-permission="'super'">
+                <input type="text" v-model.number="price">
+                <button @click="batchUpdate">批量更新</button>
+            </div>
+            <div>
+                <button @click="$bus.$emit('pop-ups-close')">批量清除多个窗口</button>
+            </div>
         </div>
         <!-- 
             v-model 相当于:value 和 @input的组合
@@ -87,6 +91,7 @@
 
     <script src="./js/vue.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js"></script>
+    <script src="./js/directive.js"></script>
     <script src="./js/component.js"></script>
     <script>
         function getCourses() {
