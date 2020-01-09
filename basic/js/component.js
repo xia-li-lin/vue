@@ -30,7 +30,7 @@ Vue.component('course-list', {
                     :class="{'active':selectedCourse===course}"
                     :style="{backgroundColor:selectedCourse===course?'orange':'transparent'}"
                     @click="handleCourseClick(course)">
-                    {{ course.name }} - ￥{{course.price}}
+                    {{ course.name }} - {{course.price | currency('$')}}
                 </li>
             </ul>
         </div>
@@ -40,6 +40,12 @@ Vue.component('course-list', {
             this.selectedCourse = course;
         }
     },
+    // 过滤器 - 局部
+    filters:{
+        currency(value,symbol='￥'){
+            return symbol + value;
+        }
+    }
 });
 
 // 新增课程组件
@@ -139,3 +145,8 @@ Vue.component('pop-ups', {
         }
     },
 });
+
+// 过滤器 - 全局
+// Vue.filter('currency', function (value) {
+//     return '￥' + value;
+// });
