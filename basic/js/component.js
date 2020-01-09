@@ -1,3 +1,6 @@
+// 事件总线:在Vue原型上添加一个Vue实例，实现组件间相互通信，而且不受组件关系影响
+Vue.prototype.$bus = new Vue();
+
 // 创建课程列表组件
 Vue.component('course-list', {
     data() {
@@ -27,7 +30,7 @@ Vue.component('course-list', {
                     :class="{'active':selectedCourse===course}"
                     :style="{backgroundColor:selectedCourse===course?'orange':'transparent'}"
                     @click="handleCourseClick(course)">
-                    {{ course.name }}
+                    {{ course.name }} - ￥{{course.price}}
                 </li>
             </ul>
         </div>
@@ -71,4 +74,25 @@ Vue.component('course-add', {
             this.$emit('input', e.target.value);
         }
     },
+});
+
+// 弹窗组件
+Vue.component('pop-ups', {
+    props: ['show'],
+    template: `
+        <div class="pop-ups-box" v-if="show">
+            <div class="pop-ups">
+                <span class="close" @click="$emit('update:show',false)">x</span>
+                <div class="content">
+                    <slot name="title">提示:</slot>
+                    <slot></slot>
+                </div>
+            </div>
+        </div>
+    `,
+    mounted(){
+        this.$bus.$on('pop-ups-close',()=>{
+            this.$emit('update:show',false);
+        });
+    }
 });

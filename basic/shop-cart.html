@@ -11,6 +11,38 @@
             background-color: purple;
             color: #fff;
         }
+
+        .success {
+            text-align: center;
+            position: relative;
+            width: 320px;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            margin: auto;
+            background: #4fc08d;
+            border: 1px solid #42b983;
+        }
+
+        .warning {
+            text-align: center;
+            position: relative;
+            width: 320px;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            margin: auto;
+            background: #f66;
+            border: 1px solid #d63200;
+        }
+
+        .pop-ups .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 18px;
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 18px;
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -21,6 +53,12 @@
         </h2>
         <!-- 新增课程 -->
         <course-add v-model="course" @add-course="addCourse"></course-add>
+        <!-- 批量更新价格 -->
+        <div>
+            <input type="text" v-model.number="price">
+            <button @click="batchUpdate">批量更新</button>
+            <button @click="$bus.$emit('pop-ups-close')">批量清除多个窗口</button>
+        </div>
         <!-- 
             v-model 相当于:value 和 @input的组合
             <course-add :value="course" @input="OnInput" @add-course="addCourse"></course-add>
@@ -28,37 +66,78 @@
         <!-- 课程列表 -->
         <course-list :courses="courses"></course-list>
         <p>课程总数：{{totalCourse}}门</p>
+        <!-- 弹窗组件 -->
+        <pop-ups :show.sync="show" class="success">
+            <template v-slot:title>{{title}}</template>
+            添加成功！
+        </pop-ups>
+        <!-- 弹窗组件 -->
+        <pop-ups :show.sync="showWarning" class="warning">
+            <template v-slot:title>{{title}}</template>
+            请输入课程名称！
+        </pop-ups>
     </div>
 
     <script src="./js/vue.js"></script>
     <script src="./js/component.js"></script>
     <script>
-        const vue = new Vue({
+        function getCourses() {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve([
+                        { id: '1', name: 'web全栈开发' },
+                        { id: '2', name: 'web高级开发' }
+                    ])
+                }, 2000);
+            });
+        }
+        const vm = new Vue({
             el: '#app',
             data() {
                 return {
                     title: '购物车',
                     totalCourse: 0,
                     course: '',
-                    courses: [
-                        { id: '1', name: 'web全栈开发' },
-                        { id: '2', name: 'web高级开发' }
-                    ],
+                    tips: '提示',
+                    courses: [],
                     newCourseId: '3',
+                    show: false,
+                    showWarning: false,
+                    price: 0,
                     html: '<a href="http://www.alsovalue.com" target="_blank" style="color:red;">上海翱思网络科技有限公司</a>',
                     items: ['a', 'b', 'c']
                 }
             },
+            async created() {
+                const courses = await getCourses();
+                this.courses = courses;
+                this.batchUpdate();
+            },
             methods: {
                 addCourse() {
                     if (!this.course) {
-                        return;
+                        this.showWarning = true;
+                    } else {
+                        this.courses.push({
+                            id: this.newCourseId++,
+                            name: this.course
+                        });
+                        this.course = '';
+                        this.show = true;
+                        // setTimeout(() => {
+                        //     this.show = false;
+                        // }, 3000);
                     }
-                    this.courses.push({
-                        id: this.newCourseId++,
-                        name: this.course
+                },
+                batchUpdate() {
+                    this.courses.forEach(value => {
+                        // Vue.set(value,'price',this.price);
+                        this.$set(value, 'price', this.price);
+                        // this.$delete(value,'name');
                     });
-                    this.course = '';
+                },
+                batchClear() {
+
                 }
             },
             // computed: {
@@ -77,12 +156,12 @@
             },
         });
 
-        // Vue.set(vue.items, 1, 'bb');
-        // vue.items.splice(0, 1, 'aa');
+        // Vue.set(vm.items, 1, 'bb');
+        // vm.items.splice(0, 1, 'aa');
 
-        vue.$set(vue.items, 0, 'aa');
-        vue.items.splice(2);
-        console.log(vue.$options.render);
+        vm.$set(vm.items, 0, 'aa');
+        vm.items.splice(2);
+        console.log(vm.$options.render);
     </script>
 </body>
 
