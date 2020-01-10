@@ -1,6 +1,18 @@
 // 事件总线:在Vue原型上添加一个Vue实例，实现组件间相互通信，而且不受组件关系影响
 Vue.prototype.$bus = new Vue();
 
+// 混入
+const myMixin = {
+    created: function () {
+        this.hello();
+    },
+    methods: {
+        hello() {
+            console.log('mixin')
+        }
+    },
+};
+
 // 创建课程列表组件
 Vue.component('course-list', {
     data() {
@@ -85,6 +97,7 @@ Vue.component('course-add', {
 // 弹窗组件
 Vue.component('pop-ups', {
     props: ['show'],
+    mixins: [myMixin],
     // template: `
     //     <transition name="fade">
     //         <div class="pop-ups-box" v-if="show">

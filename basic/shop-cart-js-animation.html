@@ -55,9 +55,10 @@
 
 <body>
     <div id="app">
-        <h2 v-bind:title="title">
+        <!-- <h2 v-bind:title="title">
             {{title}}
-        </h2>
+        </h2> -->
+        <heading :title="title"></heading>
         <!-- 新增课程 -->
         <course-add v-model="course" @add-course="addCourse"></course-add>
         <!-- 批量更新价格 -->
@@ -92,6 +93,7 @@
     <script src="./js/vue.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js"></script>
     <script src="./js/directive.js"></script>
+    <script src="./js/plugins.js"></script>
     <script src="./js/component.js"></script>
     <script>
         function getCourses() {
@@ -104,6 +106,9 @@
                 }, 2000);
             });
         }
+
+        Vue.use(MyPlugin);
+
         const vm = new Vue({
             el: '#app',
             data() {
